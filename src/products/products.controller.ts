@@ -53,7 +53,7 @@ export class ProductsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (file) {
-      dto.image = `http://localhost:3001/uploads/${file.filename}`;
+      dto.image = `https://backend-s5lg.onrender.com/uploads/${file.filename}`;
     }
     return this.productsService.create(dto);
   }
@@ -75,7 +75,7 @@ export class ProductsController {
     @UploadedFile() file?: Express.Multer.File,
   ) {
     if (file) {
-      dto.image = `https://backend-s5lg.onrender.com/${file.filename}`;
+      dto.image = `https://backend-s5lg.onrender.com/uploads/${file.filename}`;
     }
     return this.productsService.update(id, dto);
   }
