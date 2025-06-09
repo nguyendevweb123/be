@@ -11,7 +11,7 @@ async function bootstrap() {
   // Di chuyển đoạn code enableCors vào đây, sau khi 'app' đã được tạo
    app.enableCors({
     // Lấy URL frontend từ biến môi trường FRONTEND_URL
-    origin: configService.get<string>('https://fe-psi-nine.vercel.app/'),
+    origin: configService.get<string>('FRONTEND_URL'),
     credentials: true,
   });
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
