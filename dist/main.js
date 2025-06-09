@@ -9,7 +9,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
     app.enableCors({
-        origin: configService.get('https://fe-psi-nine.vercel.app/'),
+        origin: configService.get('FRONTEND_URL'),
         credentials: true,
     });
     app.use('/uploads', express.static((0, path_1.join)(__dirname, '..', 'uploads')));

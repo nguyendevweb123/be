@@ -16,6 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Product } from './schemas/products.schema';
+import { ConfigService } from '@nestjs/config'; // 👈
 
 const generateFilename = (file: Express.Multer.File): string => {
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -24,7 +25,10 @@ const generateFilename = (file: Express.Multer.File): string => {
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly configService: ConfigService, // 👈
+  ) {}
 
   @Get()
   findAll(): Promise<Product[]> {
@@ -33,7 +37,6 @@ export class ProductsController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Product> {
-    console.log('🔥 Called GET /products/' + id);
     return this.productsService.findOne(id);
   }
 
@@ -53,7 +56,8 @@ export class ProductsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (file) {
-      dto.image = `http://localhost:3001/uploads/${file.filename}`;
+      const baseUrl = this.configService.get<string>('BASE_URL');
+      dto.image = `${baseUrl}/uploads/${file.filename}`;
     }
     return this.productsService.create(dto);
   }
@@ -75,7 +79,8 @@ export class ProductsController {
     @UploadedFile() file?: Express.Multer.File,
   ) {
     if (file) {
-      dto.image = `http://localhost:3001/uploads/${file.filename}`;
+      const baseUrl = this.configService.get<string>('BASE_URL');
+      dto.image = `${baseUrl}/uploads/${file.filename}`;
     }
     return this.productsService.update(id, dto);
   }
