@@ -20,35 +20,31 @@ const update_product_dto_1 = require("./dto/update-product.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const path_1 = require("path");
-const config_1 = require("@nestjs/config");
 const generateFilename = (file) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     return `${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`;
 };
 let ProductsController = class ProductsController {
     productsService;
-    configService;
-    constructor(productsService, configService) {
+    constructor(productsService) {
         this.productsService = productsService;
-        this.configService = configService;
     }
     findAll() {
         return this.productsService.findAll();
     }
     findOne(id) {
+        console.log('🔥 Called GET /products/' + id);
         return this.productsService.findOne(id);
     }
     async create(dto, file) {
         if (file) {
-            const baseUrl = this.configService.get('BASE_URL');
-            dto.image = `${baseUrl}/uploads/${file.filename}`;
+            dto.image = `https://backend-s5lg.onrender.com/uploads/${file.filename}`;
         }
         return this.productsService.create(dto);
     }
     async update(id, dto, file) {
         if (file) {
-            const baseUrl = this.configService.get('BASE_URL');
-            dto.image = `${baseUrl}/uploads/${file.filename}`;
+            dto.image = `https://backend-s5lg.onrender.com/uploads/${file.filename}`;
         }
         return this.productsService.update(id, dto);
     }
@@ -130,7 +126,6 @@ __decorate([
 ], ProductsController.prototype, "import", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
-    __metadata("design:paramtypes", [products_service_1.ProductsService,
-        config_1.ConfigService])
+    __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);
 //# sourceMappingURL=products.controller.js.map
